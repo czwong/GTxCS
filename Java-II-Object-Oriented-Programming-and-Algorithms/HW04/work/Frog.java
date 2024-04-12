@@ -42,8 +42,8 @@ public class Frog {
     this.age++;
     this.isFroglet = this.age > 1 && this.age < 7;
 
-    if (this.age < 12) this.tongueSpeed++;
-    else if (this.age >= 30 && this.tongueSpeed > 5) this.tongueSpeed--;
+    if (this.age < MIN_AGE) this.tongueSpeed++;
+    else if (this.age >= MAX_AGE && this.tongueSpeed > DEFAULT_TONGUESPEED) this.tongueSpeed--;
   }
 
   public void eat(Fly fly) {
