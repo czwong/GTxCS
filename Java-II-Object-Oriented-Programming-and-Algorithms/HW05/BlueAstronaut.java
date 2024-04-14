@@ -3,6 +3,7 @@ import java.util.Arrays;
 public class BlueAstronaut extends Player implements Crewmate {
   private int numTasks;
   private int taskSpeed;
+  private boolean completedTask = false;
   private static final int DEFAULT_SUSLEVEL = 15;
   private static final int DEFAULT_NUMTASKS = 6;
   private static final int DEFAULT_TASKSPEED = 10;
@@ -19,14 +20,14 @@ public class BlueAstronaut extends Player implements Crewmate {
 
   @Override
   public void completeTask() {
-    if (this.isFrozen() || this.numTasks < 0) return;
+    if (this.isFrozen() || this.completedTask) return;
 
     this.numTasks = Math.max(0, this.taskSpeed > 20 ? this.numTasks - 2 : this.numTasks - 1);
 
     if (this.numTasks == 0) {
       System.out.println("I have completed all my tasks");
       this.setSusLevel((int) (0.5 * this.getSusLevel()));
-      this.numTasks--;
+      this.completedTask = true;
     }
   }
 
@@ -37,13 +38,23 @@ public class BlueAstronaut extends Player implements Crewmate {
     Player[] players = super.getPlayers();
     Arrays.sort(players);
 
-    for (int i = players.length - 1; i >= 0; i--) {
-      Player currPlayer = players[i];
-      if (currPlayer == this || currPlayer.isFrozen()) continue;
-      if (currPlayer.getSusLevel() > this.getSusLevel()) {
-        currPlayer.setFrozen(true);
+    int i = players.length - 2;
+    int j = players.length - 1;
+
+    for (; i >= 0; i--) {
+      Player playerI = players[i];
+      Player playerJ = players[j];
+
+      if (playerJ.isFrozen()) {
+        j--;
+        continue;
+      };
+      if (playerI.getSusLevel() < playerJ.getSusLevel()) {
+        playerJ.setFrozen(true);
         break;
       }
+      if (playerI.isFrozen()) continue;
+      if (playerI.getSusLevel() == playerJ.getSusLevel()) return;
     }
 
     this.gameOver();

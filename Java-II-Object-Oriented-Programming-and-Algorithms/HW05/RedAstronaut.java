@@ -41,13 +41,23 @@ public class RedAstronaut extends Player implements Impostor {
     Player[] players = super.getPlayers();
     Arrays.sort(players);
 
-    for (int i = players.length - 1; i >= 0; i--) {
-      Player currPlayer = players[i];
-      if (currPlayer == this || currPlayer.isFrozen()) continue;
-      if (currPlayer.getSusLevel() > this.getSusLevel()) {
-        currPlayer.setFrozen(true);
+    int i = players.length - 2;
+    int j = players.length - 1;
+
+    for (; i >= 0; i--) {
+      Player playerI = players[i];
+      Player playerJ = players[j];
+
+      if (playerJ == this || playerJ.isFrozen()) {
+        j--;
+        continue;
+      };
+      if (playerI.getSusLevel() < playerJ.getSusLevel()) {
+        playerJ.setFrozen(true);
         break;
       }
+      if (playerI == this || playerI.isFrozen()) continue;
+      if (playerI.getSusLevel() == playerJ.getSusLevel()) return;
     }
 
     this.gameOver();
