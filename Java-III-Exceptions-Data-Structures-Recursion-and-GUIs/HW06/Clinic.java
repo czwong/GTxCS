@@ -35,15 +35,17 @@ public class Clinic {
     while (!success) {
       System.out.println(prompt);
       try {
-        if (inputType.equals("health") && input.hasNextDouble()) {
+        if (inputType.equals("health")) {
           output = (T) Double.valueOf(input.nextDouble());
-        } else if (inputType.equals("painLevel") && input.hasNextInt()) {
+        } else if (inputType.equals("painLevel")) {
           output = (T) Integer.valueOf(input.nextInt());
         }
+        System.out.println("here");
         success = true;
       } catch(InputMismatchException e) {
         System.out.println("Please enter a number.");
       } finally {
+        System.out.println(output);
         input.nextLine();
       }
     }
@@ -122,42 +124,12 @@ public class Clinic {
       String petAttribute = parts[2];
       String timeIn = parts[3];
 
+      if (!typeOfPet.equals("Dog") && !typeOfPet.equals("Cat")) throw new InvalidPetException();
+
       System.out.println(String.format("Consultation for %s the %s at %s.\n",
         name, typeOfPet, timeIn));
 
-      if (!typeOfPet.equals("Dog") && !typeOfPet.equals("Cat")) throw new InvalidPetException();
-
       Pet pet = null;
-      // boolean success = false;
-      // double health = 0.0;
-      // int painLevel = 0;
-
-      // while (!success) {
-      //   System.out.printf("What is the health of %s?\n", name);
-      //   try {
-      //     if (input.hasNextDouble()) health = input.nextDouble();
-      //     success = true;
-      //   } catch(InputMismatchException e) {
-      //     System.out.println("Please enter a number.");
-      //   } finally {
-      //     input.nextLine();
-      //   }
-      // }
-
-      // success = false;
-
-      // while (!success) {
-      //   System.out.printf("On a scale of 1 to 10, how much pain is %s in right now?\n", name);
-      //   try {
-      //     if (input.hasNextInt()) painLevel = input.nextInt();
-      //     success = true;
-      //   } catch(InputMismatchException e) {
-      //     System.out.println("Please enter a number.");
-      //   } finally {
-      //     input.nextLine();
-      //   }
-      // }
-
       double health = (double) takeUserInput("health", input, name);
       int painLevel = (int) takeUserInput("painLevel", input, name);
 
@@ -188,5 +160,4 @@ public class Clinic {
   public String nextDay(String fileName) throws FileNotFoundException {
     return nextDay(new File(fileName));
   }
-
 }
