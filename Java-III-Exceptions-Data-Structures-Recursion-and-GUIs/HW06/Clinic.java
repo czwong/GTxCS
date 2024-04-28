@@ -18,6 +18,7 @@ public class Clinic {
     this.day = 1;
   }
 
+  @SuppressWarnings("unchecked")
   private <T> T takeUserInput(String inputType, Scanner input, String name) {
     boolean success = false;
     String prompt = "";
@@ -25,10 +26,10 @@ public class Clinic {
 
     switch(inputType) {
       case "health":
-        prompt = String.format("What is the health of %s?\n", name);
+        prompt = String.format("What is the health of %s?", name);
         break;
       case "painLevel":
-        prompt = String.format("On a scale of 1 to 10, how much pain is %s in right now?\n", name);
+        prompt = String.format("On a scale of 1 to 10, how much pain is %s in right now?", name);
         break;
     }
 
@@ -40,12 +41,10 @@ public class Clinic {
         } else if (inputType.equals("painLevel")) {
           output = (T) Integer.valueOf(input.nextInt());
         }
-        System.out.println("here");
         success = true;
       } catch(InputMismatchException e) {
         System.out.println("Please enter a number.");
       } finally {
-        System.out.println(output);
         input.nextLine();
       }
     }
@@ -126,7 +125,7 @@ public class Clinic {
 
       if (!typeOfPet.equals("Dog") && !typeOfPet.equals("Cat")) throw new InvalidPetException();
 
-      System.out.println(String.format("Consultation for %s the %s at %s.\n",
+      System.out.println(String.format("Consultation for %s the %s at %s.",
         name, typeOfPet, timeIn));
 
       Pet pet = null;
