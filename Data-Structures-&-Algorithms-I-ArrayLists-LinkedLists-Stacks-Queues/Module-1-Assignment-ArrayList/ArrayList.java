@@ -42,13 +42,15 @@ public class ArrayList<T> {
     public void addToFront(T data) {
         // WRITE YOUR CODE HERE (DO NOT MODIFY METHOD HEADER)!
         if (data == null) throw new IllegalArgumentException("Data cannot be null");
+        if (size == backingArray.length) resizeBackingArray();
 
-        T temp = this.backingArray[0];
-        this.backingArray[0] = data;
 
-        for (int i = 0; i < this.backingArray.length; i++) {
-
+        for (int i = size; i > 0 ; i--) {
+          backingArray[i] = backingArray[i - 1];
         }
+
+        backingArray[0] = data;
+        size++;
     }
 
     /**
@@ -62,6 +64,9 @@ public class ArrayList<T> {
     public void addToBack(T data) {
         // WRITE YOUR CODE HERE (DO NOT MODIFY METHOD HEADER)!
         if (data == null) throw new IllegalArgumentException("Data cannot be null");
+        if (size == backingArray.length) resizeBackingArray();
+
+        backingArray[size++] = data;
     }
 
     /**
@@ -78,6 +83,18 @@ public class ArrayList<T> {
      */
     public T removeFromFront() {
         // WRITE YOUR CODE HERE (DO NOT MODIFY METHOD HEADER)!
+        if (size == 0) throw new NoSuchElementException();
+
+        T temp = backingArray[0];
+
+        for (int i = 0; i < size - 1; i++) {
+          backingArray[i] = backingArray[i + 1];
+        }
+
+        size--;
+        backingArray[size] = null;
+
+        return temp;
     }
 
     /**
@@ -92,6 +109,14 @@ public class ArrayList<T> {
      */
     public T removeFromBack() {
         // WRITE YOUR CODE HERE (DO NOT MODIFY METHOD HEADER)!
+        if (size == 0) throw new NoSuchElementException();
+
+        T temp = backingArray[size - 1];
+
+        size--;
+        backingArray[size] = null;
+
+        return temp;
     }
 
     /**
@@ -118,5 +143,15 @@ public class ArrayList<T> {
     public int size() {
         // DO NOT MODIFY THIS METHOD!
         return size;
+    }
+
+    private void resizeBackingArray() {
+      T[] newBackingArray = (T[]) new Object[backingArray.length * 2];
+
+      for (int i = 0; i < size; i++) {
+        newBackingArray[i] = backingArray[i];
+      }
+
+      backingArray = newBackingArray;
     }
 }
